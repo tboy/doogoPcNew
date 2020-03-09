@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>方案设置</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../js/page/easyhelper.min.css">
+		<script src="../js/page/jquery-3.3.1.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script src="../js/page/jquery.transit.min.js"></script>
+		<script src="../js/page/es6-shim.min.js"></script>
+		<script src="../js/page/easyhelper.min.js"></script>
+
+		<script src="faszData.js"></script>
+		<script src="fasz.js"></script>
+
+	</head>
+	<body>
+		<div class="myContents" id="ct" style="opacity:0;">
+			<div class="top_title" style="margin-left: 30px;">方案设置</div>
+			<div><span>方案消息推送</span> <span>已开启</span>
+				<el-button @click="editDay">修改</el-button>
+			</div>
+			<div><span>避免骚扰客户</span> <span>5天</span>
+				<el-button @click="editDay">修改</el-button>
+			</div>
+			<div><span>触发事件设置</span> </div>
+
+			<div>
+				<el-button type="primary" @click="addEvent">添加事件</el-button>
+			</div>
+			<el-table :data="list" style="width: 100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
+
+				<el-table-column label="开关" align='center' width="80">
+					<template slot-scope="scope">
+						<el-switch style="" @change="switchHandle(scope.row)" v-model="scope.row.isOpen" active-color="#007398"
+						 inactive-color="#ff4949">
+						</el-switch>
+					</template>
+				</el-table-column>
+				<el-table-column label="事件标题" align='center'>
+					<template slot-scope="scope">
+						<div><span class='rect'>{{scope.row.type}}</span>{{scope.row.name}}</div>
+					</template>
+				</el-table-column>
+				<el-table-column prop="msg" label=" 群发文字" align='center'>
+
+				</el-table-column>
+				<el-table-column prop="time" label=" 触发时间 " align='center'>
+
+				</el-table-column>
+				<el-table-column label="重复" align='center'>
+					<template slot-scope="scope">
+						<div>{{scope.row.cf==0?'无':scope.row.cf+"天/次"}}</div>
+					</template>
+				</el-table-column>
+
+
+				<el-table-column label="操作" width="250" align='center'>
+					<template slot-scope="scope">
+						<el-button type="primary" @click="edit(scope.row)">修改</el-button>
+						<el-button type="primary" @click="del(scope.row)"> 删除</el-button>
+					</template>
+				</el-table-column>
+
+
+			</el-table>
+			<div id="page" style="margin:10px 0px;margin-bottom: 50px;"></div>
+
+
+			<el-dialog title="添加事件" :visible.sync="isShow" width="60%" center>
+				<el-form style="width:50%;margin:auto;" label-position='top' ref="form" :model="form" label-width="120px">
+
+					<el-form-item label="事件类型">
+						<el-radio-group v-model="form.type">
+							<el-radio-button label="上新"></el-radio-button>
+							<el-radio-button label="促销"></el-radio-button>
+							<el-radio-button label="清仓"></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="事件标题">
+						<el-input style="width:300px;" placeholder="请输入事件标题" v-model="form.name"></el-input>
+
+					</el-form-item>
+					<el-form-item label="群发文字">
+						<el-input style="width:300px;" placeholder="请输入群发文字" v-model="form.msg"></el-input>
+						{{form.msg.length}}/500
+					</el-form-item>
+					<el-form-item label="触发时间">
+						<el-date-picker v-model="form.time" type="date" value-format="yyyy-MM-dd" placeholder="选择日期">
+						</el-date-picker>
+						<br>
+						建议要比群发时间提前
+					</el-form-item>
+					<el-form-item label="重复">
+						<el-input type='number' style="width:300px;" placeholder="" v-model="form.cf"></el-input>
+						天/次
+						<br>
+						设置为“0”表示不重复
+					</el-form-item>
+
+				</el-form>
+
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="isShow=false">取 消</el-button>
+					<el-button type="primary" @click="addItem">确 定</el-button>
+				</span>
+			</el-dialog>
+
+		</div>
+	</body>
+</html>
+<style>
+	.rect {
+		border: 1px solid #ccc;
+		padding: 2px 5px;
+		text-align: center;
+		margin-right: 10px;
+	}
+
+	.el-button+.el-button,
+	.el-button--primary {
+		line-height: 0;
+	}
+
+	.helper-page-wrapper i.active {
+		color: #fff;
+		background: #007398;
+		cursor: default;
+	}
+
+	.myheader {
+		background-color: #efefef !important;
+
+	}
+
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+
+	.el-pagination.is-background .el-pager li:not(.disabled).active {
+		background-color: #007398;
+		color: #FFF;
+	}
+
+	.el-tabs__item.is-active {
+		color: #007398;
+	}
+
+	.el-picker-panel__shortcut:hover {
+		color: #007398;
+	}
+
+	.el-date-table td.end-date span,
+	.el-date-table td.start-date span {
+		background-color: #007398;
+	}
+</style>
