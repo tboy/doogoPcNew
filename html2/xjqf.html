@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>新建群发</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="xjqfData.js"></script>
+		<script src="xjqf.js"></script>
+	</head>
+	<body>
+		<div class="myContents" id="ct" style="opacity:0;">
+			<div class="top_title">新建群发</div>
+			<el-form style="width:95%;margin:auto;" ref="form" :model="form" :rules="rules" label-position='left' label-width="120px">
+
+				<el-form-item label="任务名称" prop="rwmc">
+					<el-input style="width:150px;" placeholder="请输入任务名称" type="text" v-model="form.rwmc"></el-input>
+				</el-form-item>
+				<el-form-item  label="任务类型" prop="rwlx">
+					<el-radio-group v-model="form.rwlx" @change="changeRwlx">
+						<el-radio-button label="上新"></el-radio-button>
+						<el-radio-button label="促销"></el-radio-button>
+						<el-radio-button label="清仓"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="群发目标" prop="qfmb">
+					<el-radio-group v-model="form.qfmb" @change="changeQfmb">
+						<el-radio-button label="领券中心"></el-radio-button>
+						<el-radio-button label="商品推广"></el-radio-button>
+						<el-radio-button label="图文消息"></el-radio-button>
+						<el-radio-button label="商城优惠券"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="群发文字" prop="qfwz">
+					<el-input style="width:300px;" placeholder="请输入群发文字" v-model="form.qfwz"></el-input>
+					{{form.qfwz.length}}/500
+				</el-form-item>
+				<el-form-item label="群发内容" prop="qfnr">
+					<el-radio-group v-model="form.qfnr" @change="changeQfnr">
+						<el-radio-button label="领券中心"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="群发人群" prop="qfrq">
+					<el-radio-group v-model="form.qfrq" @change="changeQfnr">
+						<el-radio-button label="按标签"></el-radio-button>
+						<el-radio-button label="按成员"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="定时群发" prop="dsqf">
+					<el-radio-group v-model="form.dsqf" @change="changeQfnr">
+						<el-radio-button label="马上群发"></el-radio-button>
+						<el-radio-button label="设置群发时间"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				
+				<el-row style="margin-bottom: 100px;">
+					<el-button @click="back();">取消</el-button>
+					<el-button type="primary" @click="save();">保存并关闭</el-button>
+				</el-row>
+			</el-form>
+		</div>
+	</body>
+</html>
+<style>
+	.titl {
+
+		height: 2rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.el-select .el-input {
+		width: 130px;
+	}
+
+	.input-with-select .el-input-group__append {
+		background-color: #fff;
+	}
+
+	.el-checkbox-button:after {
+		content: "";
+		position: absolute;
+		right: 1px;
+		top: -2px;
+		width: 0;
+		height: 0;
+		border-top: 6px solid transparent;
+		border-bottom: 6px solid transparent;
+		border-left: 6px solid #0087b3;
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+		border-radius: 2px;
+	}
+
+	.noAng:after {
+
+		border: 0;
+
+		border-radius: 0px;
+	}
+
+	.el-checkbox-button.is-checked:after,
+	.el-checkbox-button:active:after,
+	.el-checkbox-button:hover:after {
+		border-left: 6px solid #0087b3;
+	}
+
+	.box-card {
+		width: 250px;
+	}
+
+	.el-card__header {
+		padding: 0;
+	}
+
+	.el-card__body {
+		padding: 0px 5px;
+		height: 135px;
+		overflow-y: scroll;
+	}
+
+	.el-tag__close {
+		float: right;
+		top: 7px !important;
+	}
+
+	.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before,
+	.el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+		content: '·';
+		color: #F56C6C;
+		position: sticky;
+		left: 128px;
+		font-size: 12px;
+		font-weight: bolder;
+	}
+
+
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+</style>

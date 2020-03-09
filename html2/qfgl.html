@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>群发管理</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../js/page/easyhelper.min.css">
+		<script src="../js/page/jquery-3.3.1.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script src="../js/page/jquery.transit.min.js"></script>
+		<script src="../js/page/es6-shim.min.js"></script>
+		<script src="../js/page/easyhelper.min.js"></script>
+		
+
+		<script src="qfglData.js"></script>
+		<script src="qfgl.js"></script>
+	</head>
+	<body>
+		<div class="myContents" id="ct" style="opacity:0;">
+			<div class="top_title" style="margin-left: 30px;">群发管理</div>
+			<el-button type="primary" onclick="javascript:location.href='xjjh.html'">智能群发方案</el-button>
+			<el-button type="primary" onclick="javascript:location.href='xjjh.html'">新建群发</el-button>
+
+			<el-table :data="list" style="width: 100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
+
+				<el-table-column prop="name" label="任务名称">
+
+				</el-table-column>
+				<el-table-column prop="type" label="任务类型" width="100">
+
+				</el-table-column>
+				<el-table-column prop="time" label="发送时间" width="150">
+
+				</el-table-column>
+				<el-table-column prop="state" label="任务状态" width="150">
+
+				</el-table-column>
+				<el-table-column prop="detail" label="发送情况">
+
+				</el-table-column>
+
+				<el-table-column label="操作" width="250">
+					<template slot-scope="scope">
+						<el-link v-if="scope.row.state=='待发送'" type="primary" @click="send(scope.row)">发送</el-link>
+						<el-link type="primary" @click="goEdit(scope.row)">编辑</el-link>
+						<el-link type="primary" @click="delRow(scope.row)">删除</el-link>
+					</template>
+				</el-table-column>
+
+
+			</el-table>
+			<div id="page" style="margin:10px 0px;margin-bottom: 50px;"></div>
+
+
+		</div>
+	</body>
+</html>
+<style>
+	.el-button+.el-button ,.el-button--primary {
+		line-height: 0;
+	}
+	.helper-page-wrapper i.active {
+	    color: #fff;
+	    background: #007398;
+	    cursor: default;
+	}
+	.myheader {
+		background-color: #efefef !important;
+	}
+
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+
+	.el-pagination.is-background .el-pager li:not(.disabled).active {
+		background-color: #007398;
+		color: #FFF;
+	}
+
+	.el-tabs__item.is-active {
+		color: #007398;
+	}
+
+	.el-picker-panel__shortcut:hover {
+		color: #007398;
+	}
+
+	.el-date-table td.end-date span,
+	.el-date-table td.start-date span {
+		background-color: #007398;
+	}
+</style>

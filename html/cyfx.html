@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>线索推广创意分析</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<link href="../css/easyhelper.min.css" rel="stylesheet"/>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="../js/echarts.min.js"></script>
+		<script src="cyfxData.js"></script>
+		<script src="cyfx.js"></script>
+	</head>
+	<body >
+		<div class="myContents" id="ct" style="opacity:0;">
+
+
+			<div class="searchPanle">
+				<el-date-picker style="float:left;height:34px;" v-model="form.daterange" type="daterange" align="right"
+				 unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" @change="query">
+				</el-date-picker>
+			</div>
+
+			<div class="rectss">
+				<div class="rectnode">
+
+					<div>{{zhf}}</div>
+					<div>总花费</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{bgl}}</div>
+					<div>曝光量</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{djl}}</div>
+					<div>点击量</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{djll}}<span>%</span></div>
+					<div>点击率</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{djjj}}</div>
+					<div>点击均价</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{zhs}}</div>
+					<div>转化数</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{zhcb}}</div>
+					<div>转化成本</div>
+				</div>
+				<div class="rectnode">
+
+					<div>{{zhl}}</div>
+					<div>转化率</div>
+				</div>
+
+			</div>
+
+			<div style="width:100%;">关键指标趋势图
+				<div style="float:right;">
+
+						<el-select v-model="form.zb1" @change ="query" placeholder="请选择">
+						<el-option v-for="item in zbs" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+					
+					<el-select v-model="form.zb2"  @change ="query" placeholder="请选择">
+						<el-option v-for="item in zbs" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
+				</div>
+			</div>
+			<div id="charts"></div>
+			<div style="margin-bottom: 30px;">关键指标趋势图</div>
+
+			<el-table :data="list" style="width:100%;" header-row-class-name="myheader" header-cell-class-name="myheader">
+				<el-table-column label="创意" align='left'>
+					<template slot-scope="scope">
+						<div v-if="scope.row.name" style="
+    margin: auto;
+    width: 100%;
+    height: 10px;
+   
+">
+							<img :src="scope.row.img" style="margin-top:10px;display:block;float:left;max-height:60px;" />
+							<div style="width:180px;float:left;margin-left:20px;margin-top:10px;">{{scope.row.name}}</div>
+						</div>
+						<div v-if="scope.row.str!=''">
+							{{scope.row.str}}
+						</div>
+					</template>
+				</el-table-column>
+				<el-table-column label="花费" width='180' align='right' style="padding-left:20px;">
+					<template slot-scope="scope">
+						{{scope.row.hf}}
+					</template>
+				</el-table-column>
+				<el-table-column label="曝光量" width='180' align='right'>
+					<template slot-scope="scope">
+						{{scope.row.bgl}}
+					</template>
+				</el-table-column>
+				<el-table-column label="点击量" width='180' align='right'>
+					<template slot-scope="scope">
+						{{scope.row.djl}}
+					</template>
+				</el-table-column>
+				<el-table-column label="点击率" width='180' align='right'>
+					<template slot-scope="scope">
+						{{scope.row.djll}}
+					</template>
+				</el-table-column>
+				<el-table-column label="点击均价" width='180' align='right'>
+					<template slot-scope="scope">
+						{{scope.row.djjj}}
+					</template>
+				</el-table-column>
+				<el-table-column label="转化数" width='180' align='right'>
+					<template slot-scope="scope">
+						{{scope.row.zhs}}
+					</template>
+				</el-table-column>
+				<el-table-column label="转化成本" width='180' align='right'>
+					<template slot-scope="scope">
+						{{scope.row.zhcb}}
+					</template>
+				</el-table-column>
+				<el-table-column label="转化率" width='180' align='right' style="padding-left:20px;">
+					<template slot-scope="scope">
+						{{scope.row.zhl}}
+					</template>
+				</el-table-column>
+
+			</el-table>
+
+			<el-pagination style="margin-top:10px;" background layout="prev, pager, next" @current-change="query" :page-size="form.pageSize"
+			 :total="form.total" :current-page.sync="form.currentPage">
+			</el-pagination>
+		</div>
+
+	</body>
+</html>
+<style>
+	.myContents {
+		width: 98%;
+		margin: auto;
+	}
+
+	.searchPanle {
+		height: 35px;
+
+		width: 100%;
+
+		margin-top: 10px;
+	}
+
+	#charts {
+		width: 100%;
+		height: 500px;
+	}
+
+	.rectss {
+		width: 100%;
+		border: 1px solid #d1d1d1;
+		height: 100px;
+		margin-bottom: 30px;
+		margin-top: 30px;
+
+	}
+
+	.rectnode {
+		width: 12.39%;
+		float: left;
+		border-right: 1px solid #d1d1d1;
+		height: 100px;
+	}
+
+	.rectnode:last-child {
+		border-right: 0;
+	}
+
+	.rectnode span {
+		font-size: 12px;
+	}
+
+	.rectnode div:first-child {
+		font-size: 24px;
+		color: #086a8b;
+		text-align: center;
+		padding-top: 15px;
+		padding-bottom: 11px;
+	}
+
+	.rectnode div:last-child {
+		font-size: 14px;
+		color: #666;
+		text-align: center;
+		display: block;
+	}
+
+
+	.myheader {
+		background-color: #efefef !important;
+	}
+
+	.tip2 {
+		border: 0 !important;
+		box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
+
+	}
+
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+
+	.el-pagination.is-background .el-pager li:not(.disabled).active {
+		background-color: #007398;
+		color: #FFF;
+	}
+
+	.el-tabs__item.is-active {
+		color: #007398;
+	}
+
+	.el-picker-panel__shortcut:hover {
+		color: #007398;
+	}
+
+	.cell {
+		font-weight: 100;
+	}
+
+	.el-date-table td.end-date span,
+	.el-date-table td.start-date span {
+		background-color: #007398;
+	}
+
+	.el-date-editor .el-range-separator {
+		padding: 0 5px;
+		line-height: 27px;
+		width: 5%;
+		color: #303133;
+	}
+
+	.el-date-editor .el-range__icon {
+		font-size: 14px;
+		margin-left: -5px;
+		color: #C0C4CC;
+		float: left;
+		line-height: 28px;
+	}
+</style>

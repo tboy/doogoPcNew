@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>计划列表</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="jhlbData.js"></script>
+		<script src="jhlb.js"></script>
+	</head>
+	<body style="opacity:0;">
+		<div class="myContents" id="ct">
+			<!-- <el-tabs type="card" v-model="activeName" @tab-click="handleClick">
+
+				<el-tab-pane label="计划" name="1">
+
+				</el-tab-pane>
+				<el-tab-pane label="创意" name="2">
+
+				</el-tab-pane>
+			</el-tabs> -->
+			<el-button type="primary" onclick="javascript:location.href='xjjh.html'">+新建计划</el-button>
+			<el-input style="width:300px;" placeholder="输入计划ID或者名称搜索" v-model="form.keyWord">
+				<template slot="append">
+					<el-button @click="query();">搜索</el-button>
+				</template>
+			</el-input>
+			<el-date-picker style="float:right;" v-model="form.daterange" type="daterange" align="right" unlink-panels
+			 range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions">
+			</el-date-picker>
+			<el-table :data="list" style="width: 100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
+				<el-table-column label="开关" width="80">
+					<template slot-scope="scope">
+						<el-switch v-model="scope.row.isOpen" active-color="#007398" inactive-color="#ff4949">
+						</el-switch>
+					</template>
+				</el-table-column>
+
+				<el-table-column label="广告计划名称" width="250">
+					<template slot-scope="scope">
+						<span>{{scope.row.name}}&nbsp;
+
+							<el-popover v-model="scope.row.isShow" placement="right" width="400" trigger="click">
+								<el-row>
+									<el-input v-model="scope.row.tName" placeholder="请输入内容" style="width:220px;"></el-input>
+									<el-button style="border:0;" @click="scope.row.isShow = false">取消</el-button>
+									<el-button type="primary" @click="updateName(scope.row.id)">确定</el-button>
+								</el-row>
+								<el-link type="primary" slot="reference"><i class="el-icon-edit"></i></el-link>
+
+							</el-popover>
+
+						</span>
+					</template>
+				</el-table-column>
+
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-link type="primary">详情</el-link>
+						<el-link type="primary" @click="goEdit(scope.row.id)">编辑</el-link>
+						<el-link type="primary" @click="copyRow(scope.row.id)">复制</el-link>
+						<el-popover v-if="scope.row.yl!=null" trigger="hover" placement="top">
+							<div>
+								<div>计划预览</div>
+								<img style="width:100;height:100px;margin:10px;margin-left:50px;" :src="scope.row.yl" />
+								<div>使用广告位对应的APP扫码预览</div>
+							</div>
+							<el-link slot="reference" type="primary">预览</el-link>
+						</el-popover>
+						<el-popover v-if="scope.row.yl==null" trigger="hover" placement="top">
+							<div>
+								当前状态无法预览
+							</div>
+							<el-link slot="reference" type="primary">预览</el-link>
+						</el-popover>
+						<el-link type="primary" @click="delRow(scope.row.id)">删除</el-link>
+					</template>
+				</el-table-column>
+				<el-table-column label="计划状态" width="100">
+					<template slot-scope="scope">
+						{{scope.row.state}}
+					</template>
+				</el-table-column>
+
+				<el-table-column label="建议" width="100" align='center'>
+					<template slot-scope="scope">
+						<el-popover v-if="scope.row.jy!=null" trigger="hover" placement="top">
+							<div>
+								<div>审核修改建议</div>
+								<template v-for="item in scope.row.jy">
+								<div style="font-size:12px;margin-top:10px;width:200px;">{{'【'+item.title+'】  '+item.subj}}</div>
+								</template>
+							</div>
+							<div slot="reference" class="name-wrapper">
+								<i style="margin: auto;width: 13px;display: block;color: red;" class="el-icon-warning-outline" @click="showRowJY()" style="cursor:pointer;"></i>
+							</div>
+						</el-popover>
+
+						<span v-if="scope.row.jy==null">--</span>
+					</template>
+				</el-table-column>
+
+				<el-table-column label="消耗" width="80">
+					<template slot-scope="scope">
+						<span style="margin-left: 10px">{{ scope.row.xh }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="出价" width="80">
+					<template slot-scope="scope">
+						<span style="margin-left: 10px">{{ scope.row.cj }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="预算" width="80">
+					<template slot-scope="scope">
+						<span style="margin-left: 10px">{{ scope.row.ys }}</span>
+					</template>
+				</el-table-column>
+
+			</el-table>
+
+			<el-pagination background layout="prev, pager, next" @current-change="query" :page-size="form.pageSize" :total="form.total"
+			 :current-page.sync="form.currentPage">
+			</el-pagination>
+
+			<el-dialog title="审核建议" :visible.sync="showJy" width="60%">
+				<el-table :data="jys" border style="width: 100%">
+					<el-table-column label="内容">
+						<template slot-scope="scope">
+							<span style="margin-left: 10px">{{ scope.row.title }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="审核建议">
+						<template slot-scope="scope">
+							<span style="margin-left: 10px">{{ scope.row.subj }}</span>
+						</template>
+					</el-table-column>
+
+				</el-table>
+				<span slot="footer" class="dialog-footer">
+
+					<el-button type="primary" @click="showJy = false">确 定</el-button>
+				</span>
+			</el-dialog>
+		</div>
+	</body>
+</html>
+<style>
+	.myContents{
+		padding:30px;
+	}
+	.myheader {
+		    background-color: #efefef !important;
+	}
+	
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+	
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+	
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+	
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+	
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+	
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+	
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+	
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+	
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+	
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+	
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+	
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+	
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+	
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+	
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+	
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+	
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+	.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #007398;
+    color: #FFF;
+}
+.el-tabs__item.is-active {
+    color: #007398;
+}
+.el-picker-panel__shortcut:hover{
+	color: #007398;
+}
+.el-date-table td.end-date span, .el-date-table td.start-date span {
+    background-color: #007398;
+}
+</style>
