@@ -85,8 +85,8 @@
 
 					</el-form-item>
 					<el-form-item label="群发文字">
-						<el-input style="width:300px;" placeholder="请输入群发文字" v-model="form.msg"></el-input>
-						{{form.msg.length}}/500
+						<el-input  type="textarea"   :autosize="{ minRows: 8, maxRows: 8}" style="width:300px;" placeholder="请输入群发文字" v-model="form.msg"   maxlength="500" show-word-limit></el-input>
+					
 					</el-form-item>
 					<el-form-item label="触发时间">
 						<el-date-picker v-model="form.time" type="date" value-format="yyyy-MM-dd" placeholder="选择日期">

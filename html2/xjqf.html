@@ -13,6 +13,9 @@
 		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
 		<script src="../js/qqMapConfig-a.js"></script>
 		<script src="../js/city-picker/city-data.js"></script>
+			<script src="../js/UploadBase64FreeAll.js"></script>
+		<script src="../js/advData.js"></script>
+		
 		<script src="xjqfData.js"></script>
 		<script src="xjqf.js"></script>
 	</head>
@@ -24,15 +27,15 @@
 				<el-form-item label="任务名称" prop="rwmc">
 					<el-input style="width:150px;" placeholder="请输入任务名称" type="text" v-model="form.rwmc"></el-input>
 				</el-form-item>
-				<el-form-item  label="任务类型" prop="rwlx">
-					<el-radio-group v-model="form.rwlx" @change="changeRwlx">
+				<el-form-item label="任务类型" prop="rwlx">
+					<el-radio-group v-model="form.rwlx">
 						<el-radio-button label="上新"></el-radio-button>
 						<el-radio-button label="促销"></el-radio-button>
 						<el-radio-button label="清仓"></el-radio-button>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="群发目标" prop="qfmb">
-					<el-radio-group v-model="form.qfmb" @change="changeQfmb">
+					<el-radio-group v-model="form.qfmb">
 						<el-radio-button label="领券中心"></el-radio-button>
 						<el-radio-button label="商品推广"></el-radio-button>
 						<el-radio-button label="图文消息"></el-radio-button>
@@ -40,24 +43,60 @@
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="群发文字" prop="qfwz">
-					<el-input style="width:300px;" placeholder="请输入群发文字" v-model="form.qfwz"></el-input>
-					{{form.qfwz.length}}/500
+					<el-input type="textarea" :autosize="{ minRows: 8, maxRows: 8}" style="width:300px;" placeholder="请输入群发文字" v-model="form.qfwz"
+					 maxlength="500" show-word-limit></el-input>
+
 				</el-form-item>
 				<el-form-item label="群发内容" prop="qfnr">
-					<el-radio-group v-model="form.qfnr" @change="changeQfnr">
+					<el-radio-group v-if="form.qfmb == '领券中心'" v-model="form.qfnr">
 						<el-radio-button label="领券中心"></el-radio-button>
 					</el-radio-group>
+
+					<el-cascader v-if="form.qfmb == '商品推广'" style="width:300px;" v-model="form.tgsp" :options="form.tgsps" filterable></el-cascader>
+
+					<div v-if="form.qfmb == '图文消息'">
+						<el-button v-if="form.tw == ''" @click="upLoadFile();">上传图片</el-button>
+						<img style="width: 300px;height:200px;border: 1px solid #ccc;padding: 5px;border-radius: 5px;" @click="upLoadFile();"
+						 v-if="form.tw!=''" :src="form.tw"></img>
+						
+						
+					</div>
+
+					<el-select v-if="form.qfmb == '商城优惠券'" v-model="form.yhq"  filterable clearable remote reserve-keyword placeholder="请输入关键词"
+					 :remote-method="getYhq" >
+						<el-option v-for="item in yhq" :key="item.value" :label="item.label" :value="item.value">
+						</el-option>
+					</el-select>
 				</el-form-item>
 				<el-form-item label="群发人群" prop="qfrq">
-					<el-radio-group v-model="form.qfrq" @change="changeQfnr">
+					<el-radio-group v-model="form.qfrq" >
 						<el-radio-button label="按标签"></el-radio-button>
 						<el-radio-button label="按成员"></el-radio-button>
 					</el-radio-group>
-					
-					<template v-if="form.dy=='按标签'">
+
+					<template v-if="form.qfrq=='按标签'">
 						<div style="margin-top:10px;">
-							<el-cascader-panel v-model="form.tagId" style="margin-right:10px;width:380px;float:left;" ref="tagSel"
-							 @change="getTag" :props="{ multiple: true}" :filterable="true" :options="form.tags">
+							<el-cascader-panel v-model="form.tagId" style="margin-right:10px;width:380px;float:left;" ref="tagSel" @change="getTag"
+							 :props="{ multiple: true}" :filterable="true" :options="form.tag">
+							</el-cascader-panel>
+
+							<el-card class="box-card">
+								<div slot="header" class="clearfix" style="padding:5px;">
+									<span>已选</span>
+									<el-button style="float: right;" type="text" onClick="javascript:app.$refs.tagSel.clearCheckedNodes()">清空</el-button>
+								</div>
+								<el-tag style="width:100%;" v-for="(tag,idx) in form.tags" :key="tag.label" @close="delTag(idx)" closable type="info">
+									{{tag.label}}
+								</el-tag>
+
+							</el-card>
+						</div>
+					</template>
+					
+					<template v-if="form.qfrq=='按标签'">
+						<div style="margin-top:10px;">
+							<el-cascader-panel v-model="form.cyId" style="margin-right:10px;width:380px;float:left;" ref="cySel" @change="getCy"
+							 :props="{ multiple: true}" :filterable="true" :options="form.cy">
 							</el-cascader-panel>
 					
 							<el-card class="box-card">
@@ -65,45 +104,43 @@
 									<span>已选</span>
 									<el-button style="float: right;" type="text" onClick="javascript:app.$refs.tagSel.clearCheckedNodes()">清空</el-button>
 								</div>
-								<el-tag style="width:100%;" v-for="(tag,idx) in form.tags" :key="tag.label" @close="delTag(idx)" closable
-								 type="info">
+								<el-tag style="width:100%;" v-for="(tag,idx) in form.tags" :key="tag.label" @close="delTag(idx)" closable type="info">
 									{{tag.label}}
 								</el-tag>
 					
 							</el-card>
 						</div>
 					</template>
-					
+
 				</el-form-item>
 				<el-form-item label="定时群发" prop="dsqf">
-					<el-radio-group v-model="form.dsqf" @change="changeQfnr">
+					<el-radio-group v-model="form.dsqf" >
 						<el-radio-button label="马上群发"></el-radio-button>
 						<el-radio-button label="设置群发时间"></el-radio-button>
 					</el-radio-group>
-					 <el-date-picker
-					   style="margin-top:10px;"
-					    v-if="form.dsqf=='设置群发时间'"
-					      v-model="form.sendTime"
-					      type="datetime"
-						  format='yyyy-MM-dd HH:mm:ss'
-					      placeholder="选择日期时间">
-					    </el-date-picker>
+					<br>
+					<el-date-picker style="margin-top:10px;" v-if="form.dsqf=='设置群发时间'" v-model="form.sendTime" type="datetime" format='yyyy-MM-dd HH:mm:ss'
+					 placeholder="选择日期时间">
+					</el-date-picker>
 				</el-form-item>
-				
+
 				<el-row style="margin-bottom: 100px;">
 					<el-button @click="back();">取消</el-button>
 					<el-button type="primary" @click="save();">保存并关闭</el-button>
 				</el-row>
 			</el-form>
 		</div>
+		
+		<input style="display:none;" accept=".jpg,.png" type="file" id="file" />
 	</body>
 </html>
 <style>
-	.myContents{
-		width:95%;
-		margin:auto;
-		margin-top:10px;
+	.myContents {
+		width: 95%;
+		margin: auto;
+		margin-top: 10px;
 	}
+
 	.titl {
 
 		height: 2rem;

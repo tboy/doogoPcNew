@@ -5,10 +5,24 @@ var vueData = {
 		qfmb: '领券中心',
 		qfwz: '',
 		qfnr: '领券中心',
+		tgsps: advData,
+		tgsp:'',
+		tw:'',
+		yhq:'',
 		qfrq: '按标签',
+		tagId:'',
+		tag:[{"label":"客户等待(12)","value":11,"children":[{"label":"勿打扰(3)","value":111},{"label":"沟通反应(3)","value":2222}]}],
+		tags:[],
 		dsqf: '马上群发',
 		sendTime:'',
 	},
+	yhq:[],
+	yhqAll:[
+		{value:'1',label:'优惠券1'},
+		{value:'2',label:'优惠券2'},
+		{value:'3',label:'优惠券3'},
+		{value:'4',label:'优惠券4'}
+	],
 	rules: {
 		rwmc: [{
 			required: true,
