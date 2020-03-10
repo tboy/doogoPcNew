@@ -64,6 +64,23 @@ function initVue() {
 					app.$data.form.qfrq = temp;
 				}, 20);
 				
+			},
+			getCy() {
+				app.$data.form.cys = this.$refs.cySel.getCheckedNodes(true);
+				app.$data.form.cys.sort();
+			
+			},
+			delCy(idx) {
+				app.$data.form.cys.splice(idx, 1);
+				app.$data.form.cyId.splice(idx, 1);
+				app.$data.form.cys.sort();
+				var temp = app.$data.form.qfrq;
+				app.$data.form.qfrq = ''
+				setTimeout(() => {
+				
+					app.$data.form.qfrq = temp;
+				}, 20);
+				
 			}
 
 		},

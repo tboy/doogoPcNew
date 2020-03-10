@@ -93,7 +93,7 @@
 						</div>
 					</template>
 					
-					<template v-if="form.qfrq=='按标签'">
+					<template v-if="form.qfrq=='按成员'">
 						<div style="margin-top:10px;">
 							<el-cascader-panel v-model="form.cyId" style="margin-right:10px;width:380px;float:left;" ref="cySel" @change="getCy"
 							 :props="{ multiple: true}" :filterable="true" :options="form.cy">
@@ -102,9 +102,9 @@
 							<el-card class="box-card">
 								<div slot="header" class="clearfix" style="padding:5px;">
 									<span>已选</span>
-									<el-button style="float: right;" type="text" onClick="javascript:app.$refs.tagSel.clearCheckedNodes()">清空</el-button>
+									<el-button style="float: right;" type="text" onClick="javascript:app.$refs.cySel.clearCheckedNodes()">清空</el-button>
 								</div>
-								<el-tag style="width:100%;" v-for="(tag,idx) in form.tags" :key="tag.label" @close="delTag(idx)" closable type="info">
+								<el-tag style="width:100%;" v-for="(tag,idx) in form.cys" :key="tag.label" @close="delCy(idx)" closable type="info">
 									{{tag.label}}
 								</el-tag>
 					
