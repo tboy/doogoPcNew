@@ -19,8 +19,8 @@
 	</head>
 	<body>
 		<div class="myContents" id="ct" style="opacity:0;">
-			<div class="top_title" style="margin-left: 30px;">智能群发方案&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方案设置</div>
-			<div class="top_title" style="margin-left: 30px;">智能群发方案</div>
+			<div class="top_title" style="margin-bottom: 10px;height:50px;line-height:50px;background: #ccc;">智能群发方案&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;方案设置</div>
+			<div class="top_title" style="margin-bottom: 10px;">智能群发方案</div>
 
 
 			<el-table :data="list" style="width: 100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
@@ -54,6 +54,11 @@
 	</body>
 </html>
 <style>
+	.myContents{
+		width:95%;
+		margin:auto;
+		margin-top:10px;
+	}
 	.rect {
 		border: 1px solid #ccc;
 		padding: 2px 5px;

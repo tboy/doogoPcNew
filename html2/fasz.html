@@ -19,17 +19,17 @@
 	</head>
 	<body>
 		<div class="myContents" id="ct" style="opacity:0;">
-			<div class="top_title" style="margin-left: 30px;">方案设置</div>
-			<div><span>方案消息推送</span> <span>已开启</span>
+			<div class="top_title">方案设置</div>
+			<div class="top_row"><span>方案消息推送</span> <span>已开启</span>
 				<el-button @click="editDay">修改</el-button>
 			</div>
-			<div><span>避免骚扰客户</span> <span>5天</span>
+			<div class="top_row"><span>避免骚扰客户</span> <span>5天</span>
 				<el-button @click="editDay">修改</el-button>
 			</div>
-			<div><span>触发事件设置</span> </div>
-
-			<div>
-				<el-button type="primary" @click="addEvent">添加事件</el-button>
+			<div class="top_row"><span>触发事件设置</span> </div>
+			<br>
+			<div class="top_row">
+				<el-button type="primary" style="margin-top:10px;" @click="addEvent">添加事件</el-button>
 			</div>
 			<el-table :data="list" style="width: 100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
 
@@ -71,7 +71,7 @@
 
 
 			<el-dialog title="添加事件" :visible.sync="isShow" width="60%" center>
-				<el-form style="width:50%;margin:auto;" label-position='top' ref="form" :model="form" label-width="120px">
+				<el-form style="width:60%;margin:auto;" label-position='top' ref="form" :model="form" label-width="120px">
 
 					<el-form-item label="事件类型">
 						<el-radio-group v-model="form.type">
@@ -92,13 +92,13 @@
 						<el-date-picker v-model="form.time" type="date" value-format="yyyy-MM-dd" placeholder="选择日期">
 						</el-date-picker>
 						<br>
-						建议要比群发时间提前
+						<span style="color:#ccc">建议要比群发时间提前</span>
 					</el-form-item>
 					<el-form-item label="重复">
 						<el-input type='number' style="width:300px;" placeholder="" v-model="form.cf"></el-input>
 						天/次
 						<br>
-						设置为“0”表示不重复
+						<span style="color:#ccc">设置为“0”表示不重复</span>
 					</el-form-item>
 
 				</el-form>
@@ -113,6 +113,33 @@
 	</body>
 </html>
 <style>
+	.top_row {
+		margin-top: 10px;
+	}
+
+	.top_row span {
+		display: block;
+		width: 100px;
+		float: left;
+	}
+
+	.top_row span:nth-child(2) {
+		color: #ccc;
+		text-align: center;
+		width:220px;
+	}
+
+
+	.el-button {
+		line-height: 0;
+	}
+
+	.myContents {
+		width: 95%;
+		margin: auto;
+		margin-top: 10px;
+	}
+
 	.rect {
 		border: 1px solid #ccc;
 		padding: 2px 5px;

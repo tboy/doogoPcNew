@@ -18,8 +18,8 @@
 	</head>
 	<body>
 		<div class="myContents" id="ct" style="opacity:0;">
-			<div class="top_title">新建群发</div>
-			<el-form style="width:95%;margin:auto;" ref="form" :model="form" :rules="rules" label-position='left' label-width="120px">
+			<div class="top_title" style="margin-bottom: 10px;">新建群发</div>
+			<el-form style="width:100%;margin:auto;" ref="form" :model="form" :rules="rules" label-position='left' label-width="120px">
 
 				<el-form-item label="任务名称" prop="rwmc">
 					<el-input style="width:150px;" placeholder="请输入任务名称" type="text" v-model="form.rwmc"></el-input>
@@ -53,12 +53,41 @@
 						<el-radio-button label="按标签"></el-radio-button>
 						<el-radio-button label="按成员"></el-radio-button>
 					</el-radio-group>
+					
+					<template v-if="form.dy=='按标签'">
+						<div style="margin-top:10px;">
+							<el-cascader-panel v-model="form.tagId" style="margin-right:10px;width:380px;float:left;" ref="tagSel"
+							 @change="getTag" :props="{ multiple: true}" :filterable="true" :options="form.tags">
+							</el-cascader-panel>
+					
+							<el-card class="box-card">
+								<div slot="header" class="clearfix" style="padding:5px;">
+									<span>已选</span>
+									<el-button style="float: right;" type="text" onClick="javascript:app.$refs.tagSel.clearCheckedNodes()">清空</el-button>
+								</div>
+								<el-tag style="width:100%;" v-for="(tag,idx) in form.tags" :key="tag.label" @close="delTag(idx)" closable
+								 type="info">
+									{{tag.label}}
+								</el-tag>
+					
+							</el-card>
+						</div>
+					</template>
+					
 				</el-form-item>
 				<el-form-item label="定时群发" prop="dsqf">
 					<el-radio-group v-model="form.dsqf" @change="changeQfnr">
 						<el-radio-button label="马上群发"></el-radio-button>
 						<el-radio-button label="设置群发时间"></el-radio-button>
 					</el-radio-group>
+					 <el-date-picker
+					   style="margin-top:10px;"
+					    v-if="form.dsqf=='设置群发时间'"
+					      v-model="form.sendTime"
+					      type="datetime"
+						  format='yyyy-MM-dd HH:mm:ss'
+					      placeholder="选择日期时间">
+					    </el-date-picker>
 				</el-form-item>
 				
 				<el-row style="margin-bottom: 100px;">
@@ -70,6 +99,11 @@
 	</body>
 </html>
 <style>
+	.myContents{
+		width:95%;
+		margin:auto;
+		margin-top:10px;
+	}
 	.titl {
 
 		height: 2rem;

@@ -7,6 +7,7 @@ var vueData = {
 		qfnr: '领券中心',
 		qfrq: '按标签',
 		dsqf: '马上群发',
+		sendTime:'',
 	},
 	rules: {
 		rwmc: [{
