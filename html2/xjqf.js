@@ -13,7 +13,11 @@ function initVue() {
 		},
 		mounted() {
 			document.getElementById("ct").style.opacity = 1
-
+            if(location.href.indexOf("?")!=-1){
+				var id = location.href.substring(location.href.indexOf("=")+1,location.href.length);
+				this.titl="编辑群发";
+			
+			}
 			this.getYhq(null);
 		},
 		methods: {

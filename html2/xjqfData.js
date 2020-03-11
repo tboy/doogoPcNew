@@ -1,5 +1,7 @@
 var vueData = {
+		titl:'新建群发',
 	form: {
+	
 		rwmc: '',
 		rwlx: '上新',
 		qfmb: '领券中心',
@@ -8,6 +10,7 @@ var vueData = {
 		tgsps: advData,
 		tgsp:'',
 		tw:'',
+		
 		yhq:'',
 		qfrq: '按标签',
 		tagId:'',

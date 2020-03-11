@@ -38,6 +38,7 @@ function initVue() {
 			},
 			goEdit(item){
 				var pars = item;
+				location.href='xjqf.html?id='+item.id;
 			},
 			delRow(item){
 				var pars = item;

@@ -22,6 +22,9 @@ function initVue() {
 			
 		},
 		methods: {
+			goSetting(){
+			  location.href="fasz.html";	
+			},
 			query(){
 		        var pars = {currentPage:this.currentPage};
 				
