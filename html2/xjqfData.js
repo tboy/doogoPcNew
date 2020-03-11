@@ -29,6 +29,7 @@ var vueData = {
 	rules: {
 		rwmc: [{
 			required: true,
+			message: '请输入任务名称',
 			trigger: 'blur'
 		}],
 		rwlx: [{
@@ -43,6 +44,7 @@ var vueData = {
 
 		qfwz: [{
 			required: true,
+			message: '请输入群发文字',
 			trigger: 'blur'
 		}],
 
