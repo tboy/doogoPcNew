@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>群发详情</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="../js/UploadBase64FreeAll.js"></script>
+		<script src="../js/advData.js"></script>
+
+		<script src="qfxqData.js"></script>
+		<script src="qfxq.js"></script>
+	</head>
+	<body>
+		<div class="myContents" id="ct" style="opacity:0;">
+			<div class="top_title" style="margin-bottom: 10px;">群发详情</div>
+			<el-form style="width:100%;margin:auto;" ref="form" :model="form" :rules="rules" label-position='left' label-width="120px">
+
+				<el-form-item label="任务名称">
+					{{form.rwmc}}
+
+				</el-form-item>
+				<el-form-item label="任务类型">
+					{{form.rwlx}}
+
+				</el-form-item>
+				<el-form-item label="群发目标">
+					{{form.qfmb}}
+
+				</el-form-item>
+				<el-form-item label="群发文字" >
+					{{form.qfwz}}
+
+				</el-form-item>
+				<el-form-item label="群发内容">
+					<div v-if="form.qfmb == '领券中心'">
+						{{form.qfnr}}
+					</div>
+					<div v-if="form.qfmb == '商品推广'">
+						<div class="myCard">
+							<div class="leftItem" style="margin:0;">
+								<img src="../images/imgs.jpg" style="width:80px;height:80px;">
+							</div>
+						
+							<div class="rightItem"  style="margin:0;margin-top:5px;">
+								<div style="font-weight: bold;font-size:12px;width:200px;line-height:14px;">荣耀 V10全网通 标配版 4GB+64GB 魅丽红 移动联通电信</div>
+								<div style="color:red;margin-top:5px;font-weight: bold;font-size:20px;margin-top:15px;">￥231 
+								<span style="color:#ccc;font-weight: 100;font-size:13px;padding-left:15px;"><s>￥231</s></span></div>
+							</div>
+						
+						</div>
+					</div>
+					<div v-if="form.qfmb == '图文消息'">
+						<img style="width: 300px;height:200px;border: 1px solid #ccc;padding: 5px;border-radius: 5px;" :src="form.tw"></img>
+					</div>
+
+					<div v-if="form.qfmb == '商城优惠券'">
+						<div class="myCard">
+							<div class="leftItem">
+								<div style="color:red;font-weight: bold;font-size:20px;line-height: 26px;">20<span style="font-weight: 100;font-size: 12px;;">元</span></div>
+								<div style="font-size:12px;color:#ccc;    line-height: 6px;">满100元使用</div>
+							</div>
+						
+							<div class="rightItem">
+								<div style="font-weight: bold;font-size:15px;line-height: 26px;">新客100减20</div>
+								<div style="font-size: 12px;color:#ccc;margin-top:5px;    line-height: 6px;">有效期：2020.02.02-2020.02.29</div>
+							</div>
+						
+						</div>
+					</div>
+
+				</el-form-item>
+				<el-form-item label="群发人群">
+					<div>{{form.qfrq}}</div>
+					<template v-if="form.qfrq=='按标签'">
+						<el-tag style="margin-right:10px;" v-for="(tag,idx) in form.tags" :key="tag.label"  type="info">
+							{{tag.label}}
+						</el-tag>
+					</template>
+
+					<template v-if="form.qfrq=='按成员'">
+						<el-tag style="margin-right:10px;" v-for="(tag,idx) in form.cys" :key="tag.label" type="info">
+							{{tag.label}}
+						</el-tag>
+					</template>
+					
+					<div>共{{form.peoples}}人</div>
+                    <div style="width:600px;">
+					   {{form.names}}
+					</div>
+				</el-form-item>
+				<el-form-item label="定时群发" prop="dsqf">
+					 {{form.time}}
+				</el-form-item>
+
+			
+			</el-form>
+		</div>
+
+		
+	</body>
+</html>
+<style>
+	.myCard{
+		border:1px solid #eaeaea;
+		height:80px;
+		width:300px;
+		font-size:16px;
+	}
+	.leftItem{
+		float:left;
+		margin-left:10px;
+	    margin-top:18px;
+	}
+	
+	.rightItem{
+		float:right;
+		margin-top:18px;
+		margin-right:10px;
+	}
+	.myContents {
+		width: 95%;
+		margin: auto;
+		margin-top: 10px;
+	}
+
+	.titl {
+
+		height: 2rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.el-select .el-input {
+		width: 130px;
+	}
+
+	.input-with-select .el-input-group__append {
+		background-color: #fff;
+	}
+
+	.el-checkbox-button:after {
+		content: "";
+		position: absolute;
+		right: 1px;
+		top: -2px;
+		width: 0;
+		height: 0;
+		border-top: 6px solid transparent;
+		border-bottom: 6px solid transparent;
+		border-left: 6px solid #0087b3;
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+		border-radius: 2px;
+	}
+
+	.noAng:after {
+
+		border: 0;
+
+		border-radius: 0px;
+	}
+
+	.el-checkbox-button.is-checked:after,
+	.el-checkbox-button:active:after,
+	.el-checkbox-button:hover:after {
+		border-left: 6px solid #0087b3;
+	}
+
+	.box-card {
+		width: 250px;
+	}
+
+	.el-card__header {
+		padding: 0;
+	}
+
+	.el-card__body {
+		padding: 0px 5px;
+		height: 135px;
+		overflow-y: scroll;
+	}
+
+	.el-tag__close {
+		float: right;
+		top: 7px !important;
+	}
+
+	.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before,
+	.el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+		content: '·';
+		color: #F56C6C;
+		position: sticky;
+		left: 128px;
+		font-size: 12px;
+		font-weight: bolder;
+	}
+
+
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+</style>
