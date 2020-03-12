@@ -42,7 +42,10 @@
 				</el-table-column>
 				<el-table-column label="事件标题" align='center'>
 					<template slot-scope="scope">
-						<div><span class='rect'>{{scope.row.type}}</span>{{scope.row.name}}</div>
+						<div >
+						<div style="float:left;margin-left:10px;"><span class='rect'>{{scope.row.type}}</span></div>
+						<div  style="float:left;margin-left:10px;">{{scope.row.name}}</div>
+						</div>
 					</template>
 				</el-table-column>
 				<el-table-column prop="msg" label=" 群发文字" align='center'>

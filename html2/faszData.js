@@ -18,7 +18,7 @@ var queryData = [{
 		id: 1,
 		isOpen: true,
 		type: '上新',
-		name: '双十一活动来啦，福利享不停 ',
+		name: '双十福利享不停 ',
 		msg: '全网新品3月最低价——把青春穿在身上',
 		time: '2020-01-02',
 		cf: '0'

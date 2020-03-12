@@ -85,6 +85,99 @@ function initVue() {
 					app.$data.form.qfrq = temp;
 				}, 20);
 				
+			},
+			save(){
+				var pars = {};
+				if(this.form.rwmc == ''){
+					alert("请输入任务名称");
+					return;
+				}
+				if(this.form.qfwz == ''){
+					alert("群发文字");
+					return;
+				}
+				if(this.form.qfrq == '按标签'){
+					if(this.form.tagId.length == 0){
+						alert("请选择群发人群");
+						return;
+					}
+				}
+				if(this.form.qfrq == '按成员'){
+					if(this.form.cyId.length == 0){
+						alert("请选择群发人群");
+						return;
+					}
+				}
+				
+				pars.rwmc = this.form.rwmc;
+				pars.rwlx = this.form.rwlx;
+				pars.qfmb = this.form.qfmb;
+				pars.qfwz = this.form.qfwz;
+				pars.qfnr = this.form.qfnr;
+				
+				
+				if(this.form.qfmb =='领券中心'){
+					pars.qfrq = this.form.qfrq;
+				}
+				if(this.form.qfmb =='商品推广'){
+					if(this.form.tgsp == '' || this.form.tgsp.length==0){
+						alert("请选择商品推广");
+						return;
+					}
+					pars.tgsp = this.form.tgsp;
+				}
+				if(this.form.qfmb =='图文消息'){
+					if(this.form.tw==''){
+						alert("请选择图文消息");
+						return;
+					}
+					pars.tw = this.form.tw;
+				}
+				if(this.form.qfmb =='商城优惠券'){
+					if(this.form.yhq == '' || this.form.yhq.length==0){
+						alert("请选择商城优惠券");
+						return;
+					}
+					pars.yhq = this.form.yhq;
+				}
+				
+				if(this.form.qfrq == '按标签'){
+					pars.tagId = this.form.tagId;
+					
+				}
+				if(this.form.qfrq == '按成员'){
+					pars.tagId = this.form.cyId;
+				}
+				
+				pars.dsqf = this.form.dsqf;
+				if(this.form.dsqf != '马上群发'){
+					if(this.form.sendTime == ''){
+						alert("请选择发送时间");
+						return;
+					}
+					pars.sendTime = this.form.sendTime;
+				}
+				console.log(pars);
+				
+				// rwmc: '',
+				// rwlx: '上新',
+				// qfmb: '领券中心',
+				// qfwz: '',
+				// qfnr: '领券中心',
+				// tgsps: advData,
+				// tgsp:'',
+				// tw:'',
+				
+				// yhq:'',
+				// qfrq: '按标签',
+				// tagId:'',
+				// tag:[{"label":"客户等待(12)","value":11,"children":[{"label":"勿打扰(3)","value":111},{"label":"沟通反应(3)","value":2222}]}],
+				// tags:[],
+				// cyId:'',
+				// cy:[{"label":"成员1(5位客户)","value":1},{"label":"成员3(6位客户)","value":2},{"label":"成员3(7位客户)","value":3}],
+				// cys:[],
+				// dsqf: '马上群发',
+				// sendTime:'',
 			}
 
 		},
