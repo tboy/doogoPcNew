@@ -12,10 +12,10 @@ function initVue() {
 			document.getElementById("ct").style.opacity=1
 			this.query();
 			if(this.selId == null){
-				this.$confirm('欢迎首次使用智能群发方案<br/>使用前需要简单设置方案触发规则来激活智能智能群发\n如果已经设置完毕直接点击取消即可', '方案设置向导', {
+				this.$confirm('【欢迎首次使用智能群发方案，使用前需要简单设置方案触发规则】', '方案设置向导', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
-					type: 'warning',
+					
 					dangerouslyUseHTMLString:true
 				})
 			}
@@ -45,8 +45,8 @@ function initVue() {
 			},
 			
 			setFa(item){
-			
-				this.selId=item.id;
+				
+				location.href="xjfa.html?faId="+item.id;
 				
 			}
 		}

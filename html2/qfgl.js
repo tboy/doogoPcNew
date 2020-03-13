@@ -51,22 +51,27 @@ function initVue() {
 						temp = item2;
 					}
 				});
-				this.$confirm('确定删除任务:' + temp.name + '吗?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.$data.list.splice(pos, 1);
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					});
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					});
+				this.$data.list.splice(pos, 1);
+				this.$message({
+					type: 'success',
+					message: '删除成功!'
 				});
+				// this.$confirm('确定删除任务:' + temp.name + '吗?', '提示', {
+				// 	confirmButtonText: '确定',
+				// 	cancelButtonText: '取消',
+				// 	type: 'warning'
+				// }).then(() => {
+				// 	this.$data.list.splice(pos, 1);
+				// 	this.$message({
+				// 		type: 'success',
+				// 		message: '删除成功!'
+				// 	});
+				// }).catch(() => {
+				// 	this.$message({
+				// 		type: 'info',
+				// 		message: '已取消删除'
+				// 	});
+				// });
 			}
 		}
 	})

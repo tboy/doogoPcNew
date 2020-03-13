@@ -16,7 +16,16 @@ function initVue() {
             if(location.href.indexOf("?")!=-1){
 				var id = location.href.substring(location.href.indexOf("=")+1,location.href.length);
 				this.titl="编辑群发";
-			
+			    this.form.rwmc='任务名称';
+				this.form.qfwz="dsfasdf";
+				this.form.tagId =[11,111];
+				this.form.tagId.sort();
+				this.form.tags = [{label:'勿打扰(3)',value:111}]
+				this.form.qfrq = ''
+				setTimeout(() => {
+				
+					this.form.qfrq = '按标签';
+				}, 20);
 			}
 			this.getYhq(null);
 		},

@@ -3,6 +3,10 @@ var vueData = {
 	selId: null,
 	isShow:false,
 	currentPage: 1,
+	sendFlag:true,
+	day:5,
+	day1:'',
+	isOpen:false,
 	form:{
 		id:'',
 		type:'上新',

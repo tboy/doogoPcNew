@@ -19,26 +19,23 @@
 	</head>
 	<body>
 		<div class="myContents" id="ct" style="opacity:0;">
-			<div class="top_title" style="margin-bottom: 10px;height:50px;line-height:50px;background: #ccc;">智能群发方案&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="cursor:pointer;" @click="goSetting">方案设置</span></div>
-			<div class="top_title" style="margin-bottom: 10px;">智能群发方案</div>
-
 
 			<el-table :data="list" style="width: 100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
 
-				<el-table-column label="" align='center'>
+				<el-table-column label="方案标题" align='center'>
 					<template slot-scope="scope">
 						<div><span class='rect'>{{scope.row.type}}</span>{{scope.row.name}}</div>
 					</template>
 				</el-table-column>
-				<el-table-column prop="detail" label="" align='center'>
+				<el-table-column prop="detail" label="客户数" align='center'>
 
 				</el-table-column>
-				<el-table-column prop="time" label="" align='center'>
+				<el-table-column prop="time" label="创建时间" align='center'>
 
 				</el-table-column>
 
 
-				<el-table-column label="" width="150" align='center'>
+				<el-table-column label="操作" width="150" align='center'>
 					<template slot-scope="scope">
 						<el-button v-if="scope.row.id!=selId" type="primary" @click="setFa(scope.row)">使用方案</el-button>
 						<el-button v-if="scope.row.id ==selId" type="success">已使用</el-button>
@@ -54,17 +51,23 @@
 	</body>
 </html>
 <style>
+	.el-message-box__message {
+	    margin: 0;
+		font-size:13px;
+	}
 	.el-button--success {
-	    line-height: 0;
-	    color: #FFF;
-	    background-color: #67C23A;
-	    border-color: #67C23A;
+		line-height: 0;
+		color: #FFF;
+		background-color: #67C23A;
+		border-color: #67C23A;
 	}
-	.myContents{
-		width:95%;
-		margin:auto;
-		margin-top:10px;
+
+	.myContents {
+		padding: 0 30px;
+		margin: auto;
+		margin-top: 30px;
 	}
+
 	.rect {
 		border: 1px solid #ccc;
 		padding: 2px 5px;
@@ -84,7 +87,7 @@
 	}
 
 	.myheader {
-		height: 0px;
+		background-color: #efefef !important;
 
 	}
 

@@ -62,8 +62,20 @@ function initVue() {
 				pars.id = item.id;
 				pars.isOpen = item.isOpen;
 			},
+			open(){
+				console.log(this.sendFlag);
+			},
 			editDay(){
-				
+				this.day1 = this.day;
+				this.isOpen = true;
+			},
+			updateDay(){
+				if(this.day1<5){
+					alert("输入至少5天")
+					return;
+				}
+			  this.day = this.day1;
+				  this.isOpen = false;
 			},
 			addItem(){
 				if(this.form.name==''){
