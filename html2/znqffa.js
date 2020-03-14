@@ -46,7 +46,7 @@ function initVue() {
 			
 			setFa(item){
 				
-				location.href="xjfa.html?faId="+item.id;
+				location.href="xjqf.html?faId="+item.id;
 				
 			}
 		}

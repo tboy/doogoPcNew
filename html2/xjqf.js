@@ -13,8 +13,9 @@ function initVue() {
 		},
 		mounted() {
 			document.getElementById("ct").style.opacity = 1
-            if(location.href.indexOf("?")!=-1){
-				var id = location.href.substring(location.href.indexOf("=")+1,location.href.length);
+			var id = getQueryVariable('id')
+			var faId = getQueryVariable('faId')
+            if(id){
 				this.titl="编辑群发";
 			    this.form.rwmc='任务名称';
 				this.form.qfwz="dsfasdf";
@@ -26,6 +27,15 @@ function initVue() {
 				
 					this.form.qfrq = '按标签';
 				}, 20);
+			}else if(faId){
+				this.form.rwmc='任务名称';
+				this.form.tagId =[11,111];
+				this.form.tagId.sort();
+				this.form.tags = [{label:'勿打扰(3)',value:111}]
+				this.form.qfrq = ''
+				setTimeout(() => {
+					this.form.qfrq = '按标签';
+			    }, 20);
 			}
 			this.getYhq(null);
 		},
@@ -219,4 +229,16 @@ function initFile() {
 		}
 
 	});
+
 }
+function getQueryVariable(variable)
+{
+	var query = window.location.search.substring(1);
+	var vars = query.split("&");
+	for (var i=0;i<vars.length;i++) {
+		var pair = vars[i].split("=");
+		if(pair[0] == variable){return pair[1];}
+	}
+	return false;
+}
+
