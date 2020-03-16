@@ -20,15 +20,15 @@
 	<body>
 		<div class="myContents" id="ct" style="opacity:0;">
 			<div class="top_title">方案设置</div>
-			<div class="top_row"><span  style="color:#666;">方案消息推送</span> <span>{{sendFlag?'已开启':'已关闭'}}</span>
+			<div class="top_row"><span  style="color:#666;font-size:14px;">方案消息推送</span> <span>{{sendFlag?'已开启':'已关闭'}}</span>
 				<el-switch style="" @change="open()" v-model="sendFlag" active-color="#13ce66"
 				 inactive-color="#ff4949">
 				</el-switch>
 			</div>
-			<div class="top_row"><span  style="color:#666;">避免骚扰客户</span> <span>{{day}}天</span>
-				<el-button @click="editDay">修改</el-button>
+			<div class="top_row"><span  style="color:#666;font-size:14px;">避免骚扰客户</span> <span>{{day}}天</span>
+				<el-button @click="editDay"class="btnn">修改</el-button>
 			</div>
-			<div class="top_row"><span  style="color:#666;">触发事件设置</span> </div>
+			<div class="top_row"><span  style="color:#666;font-size:14px;">触发事件设置</span> </div>
 			<br>
 			<div class="top_row">
 				<el-button type="primary" style="margin-top:10px;" @click="addEvent">添加事件</el-button>
@@ -118,7 +118,7 @@
   title="避免客户骚扰"
   :visible.sync="isOpen"
   width='30%'
-  style="height:350px;    overflow: hidden;"
+  style="height:380px;    overflow: hidden;"
   center>
   <span>客户收到消息后<el-input style="width:80px !important;margin:0 10px;" type="number" v-model="day1"></el-input>天后才会再次收到</span>
   <div style="color:#666;font-size:14px;">天数至少5天以上</div>
@@ -132,6 +132,15 @@
 	</body>
 </html>
 <style>
+	.btnn{
+		width:64px;
+		
+	}
+	.btnn span{
+		float: none !important;
+		width:auto !important;
+		    margin-left: -3px;
+	}
 	.el-dialog {
 		width:800px;
 		height:500px;
