@@ -41,12 +41,7 @@
 
 				</el-form-item>
 				<el-form-item label="群发内容">
-					<el-radio-group v-model="form.qfmb">
-						<el-radio-button label="领券中心"></el-radio-button>
-						<el-radio-button label="商品推广"></el-radio-button>
-						<el-radio-button label="图文消息"></el-radio-button>
-						<el-radio-button label="商城优惠券"></el-radio-button>
-					</el-radio-group>
+
 					<div v-if="form.qfmb == '领券中心'">
 						{{form.qfnr}}
 					</div>
